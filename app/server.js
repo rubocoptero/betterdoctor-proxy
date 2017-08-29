@@ -1,14 +1,20 @@
 var express = require('express');
 var app = express();
 var request = require('request');
+var cache = {};
 
 app.get('/api/v1/doctors/search', function (req, res) {
   var name = req.query.name || '';
-  var userKey = process.env.BETTER_DOCTOR_USER_KEY;
 
+  if (cache[name]) {
+    return res.send(cache[name]);
+  }
+
+  var userKey = process.env.BETTER_DOCTOR_USER_KEY;
   endpoint = 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name + '&user_key=' + userKey;
 
   request.get(endpoint, function (error, response, body) {
+    cache[name] = body;
     res.send(body);
   });
 });

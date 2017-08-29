@@ -16,11 +16,26 @@ describe('Proxy spec', function () {
   });
 
   it('proxies BetterDoctor API response', function (done) {
-    mockApiFor('Ruben');
+    var name = 'Ruben';
+    mockApiFor(name);
 
-    request.get(endpointFor('Ruben'), function (error, response, body) {
+    request.get(endpointFor(name), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorResponse));
       done();
+    });
+  });
+
+  describe('when requesting the same for second time', function () {
+    it('returns a cached response', function (done) {
+      var name = 'Paco';
+      mockApiFor(name);
+
+      request.get(endpointFor(name), function (error, response, body) {
+        request.get(endpointFor(name), function (error, response, body) {
+          expect(body).toEqual(JSON.stringify(betterDoctorResponse));
+          done();
+        });
+      });
     });
   });
 
