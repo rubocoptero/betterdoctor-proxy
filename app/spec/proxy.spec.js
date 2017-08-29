@@ -15,44 +15,13 @@ describe('Proxy spec', function () {
     app.stop();
   });
 
-  beforeEach(function () {
-    mockApiFor('Ruben');
-  });
-
-	it('has a search doctors endpoint', function (done) {
-		request.get(endpointFor('Ruben'), function (error, response, body) {
-		  expect(response.statusCode).not.toEqual(404);
-		  done();
-		});
-	});
-
   it('proxies BetterDoctor API response', function (done) {
+    mockApiFor('Ruben');
+
     request.get(endpointFor('Ruben'), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorResponse));
       done();
     });
-  });
-
-  it('sends the name', function (done) {
-    var name = 'Paco';
-    mock = mockApiFor(name);
-
-    request.get(endpointFor(name), function (error, response, body) {
-      expect(mock.isDone()).toBe(true);
-      done();
-    });
-  });
-
-  it('adds user key', function (done) {
-    var userKey = process.env.BETTER_DOCTOR_USER_KEY;
-
-    var mock = mockApiFor('John');
-
-    request.get(endpointFor('John'), function (error, response, body) {
-      expect(mock.isDone()).toBe(true);
-      done();
-    });
-
   });
 
   function endpointFor(name) {
