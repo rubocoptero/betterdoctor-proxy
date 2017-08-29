@@ -4,7 +4,10 @@ var request = require('request');
 
 app.get('/api/v1/doctors/search', function (req, res) {
   var name = req.query.name || '';
-  endpoint = 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name
+  var userKey = process.env.BETTER_DOCTOR_USER_KEY;
+
+  endpoint = 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name + '&user_key=' + userKey;
+
   request.get(endpoint, function (error, response, body) {
     res.send(body);
   });

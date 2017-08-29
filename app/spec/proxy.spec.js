@@ -43,14 +43,28 @@ describe('Proxy spec', function () {
     });
   });
 
+  it('adds user key', function (done) {
+    var userKey = process.env.BETTER_DOCTOR_USER_KEY;
+
+    var mock = mockApiFor('John');
+
+    request.get(endpointFor('John'), function (error, response, body) {
+      expect(mock.isDone()).toBe(true);
+      done();
+    });
+
+  });
+
   function endpointFor(name) {
     return 'http://localhost:3001/api/v1/doctors/search?name=' + name;
   }
 
   function mockApiFor(name) {
+    var userKey = process.env.BETTER_DOCTOR_USER_KEY;
+
     return nock('https://api.betterdoctor.com')
       .get('/2016-03-01/doctors')
-      .query({ name: name })
+      .query({ name: name, user_key: userKey })
       .reply(200, betterDoctorResponse);
   }
 });
