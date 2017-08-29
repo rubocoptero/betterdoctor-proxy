@@ -1,0 +1,1 @@
+# BetterDoctor API proxy challenge
