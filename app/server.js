@@ -3,7 +3,8 @@ var app = express();
 var request = require('request');
 
 app.get('/api/v1/doctors/search', function (req, res) {
-  endpoint = 'https://api.betterdoctor.com/2016-03-01/doctors?name=Ruben'
+  var name = req.query.name || '';
+  endpoint = 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name
   request.get(endpoint, function (error, response, body) {
     res.send(body);
   });

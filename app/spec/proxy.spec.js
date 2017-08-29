@@ -5,7 +5,6 @@ var nock = require('nock');
 var app = require('../server.js');
 
 describe('Proxy spec', function () {
-  var ENDPOINT = 'http://localhost:3001/api/v1/doctors/search?name=Ruben'
   var betterDoctorResponse = { response: 'WHATEVER' };
 
   beforeAll(function () {
@@ -17,22 +16,41 @@ describe('Proxy spec', function () {
   });
 
   beforeEach(function () {
-    nock('https://api.betterdoctor.com')
-      .get('/2016-03-01/doctors?name=Ruben')
-      .reply(200, betterDoctorResponse);
+    mockApiFor('Ruben');
   });
 
 	it('has a search doctors endpoint', function (done) {
-		request.get(ENDPOINT, function (error, response, body) {
+		request.get(endpointFor('Ruben'), function (error, response, body) {
 		  expect(response.statusCode).not.toEqual(404);
 		  done();
 		});
 	});
 
   it('proxies BetterDoctor API response', function (done) {
-    request.get(ENDPOINT, function (error, response, body) {
+    request.get(endpointFor('Ruben'), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorResponse));
       done();
     });
   });
+
+  it('sends the name', function (done) {
+    var name = 'Paco';
+    mock = mockApiFor(name);
+
+    request.get(endpointFor(name), function (error, response, body) {
+      expect(mock.isDone()).toBe(true);
+      done();
+    });
+  });
+
+  function endpointFor(name) {
+    return 'http://localhost:3001/api/v1/doctors/search?name=' + name;
+  }
+
+  function mockApiFor(name) {
+    return nock('https://api.betterdoctor.com')
+      .get('/2016-03-01/doctors')
+      .query({ name: name })
+      .reply(200, betterDoctorResponse);
+  }
 });
