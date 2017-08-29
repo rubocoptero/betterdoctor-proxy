@@ -4,3 +4,5 @@ web:
     - "./app:/src/app"
   ports:
     - "3030:3000"
+  env_file:
+    - .env
