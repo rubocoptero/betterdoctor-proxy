@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-var searchDoctorByName = require('./src/actions/search-doctor-by-name.js')
+var searchDoctorByName = require('./src/actions/search-doctor-by-name')
 
 app.get('/api/v1/doctors/search', function (req, res, next) {
   var name = req.query.name || '';

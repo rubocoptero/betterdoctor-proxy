@@ -1,4 +1,4 @@
-var elastic = require('./elastic.js');
+var elastic = require('./elastic');
 
 var createCache = function () {
   var self = {};
