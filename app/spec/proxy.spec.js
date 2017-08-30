@@ -3,7 +3,7 @@ var nock = require('nock');
 var app = require('../app');
 var elastic = require('../src/infrastructure/elastic');
 
-describe('Proxy spec', function () {
+describe('BetterDoctor API proxy spec', function () {
   var betterDoctorResponse = { response: 'WHATEVER' };
 
   beforeAll(function (done) {
@@ -21,9 +21,9 @@ describe('Proxy spec', function () {
 
   it('proxies BetterDoctor API response', function (done) {
     var name = 'Ruben';
-    mockApiFor(name);
+    mockApiSearchFor(name);
 
-    request.get(endpointFor(name), function (error, response, body) {
+    request.get(searchUriFor(name), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorResponse));
       done();
     });
@@ -31,11 +31,11 @@ describe('Proxy spec', function () {
 
   describe('when requesting the same for second time', function () {
     it('returns a cached response', function (done) {
-      var name = 'Paco';
-      mockApiFor(name);
+      var name = 'Tom';
+      mockApiSearchFor(name);
 
-      request.get(endpointFor(name), function (error, response, body) {
-        request.get(endpointFor(name), function (error, response, body) {
+      request.get(searchUriFor(name), function (error, response, body) {
+        request.get(searchUriFor(name), function (error, response, body) {
           expect(body).toEqual(JSON.stringify(betterDoctorResponse));
           done();
         });
@@ -43,11 +43,11 @@ describe('Proxy spec', function () {
     });
   });
 
-  function endpointFor(name) {
+  function searchUriFor(name) {
     return 'http://localhost:3001/api/v1/doctors/search?name=' + name;
   }
 
-  function mockApiFor(name) {
+  function mockApiSearchFor(name) {
     var userKey = process.env.BETTER_DOCTOR_USER_KEY;
 
     return nock('https://api.betterdoctor.com')
