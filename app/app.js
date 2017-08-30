@@ -15,11 +15,6 @@ app.get('/api/v1/doctors/search', function (req, res, next) {
 
 var server = null;
 
-if (process.env.NODE_ENV !== 'test') {
-  server = app.listen(3000);
-  console.log('Server running at http://127.0.0.1:3000/');
-}
-
 exports.listen = function (port) {
   server = app.listen(port);
   console.log('Server running at http://127.0.0.1:' + port + '/');
