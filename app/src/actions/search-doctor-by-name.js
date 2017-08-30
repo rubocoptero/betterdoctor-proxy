@@ -8,9 +8,11 @@ var execute = function (name) {
         return cache.retrieve(name);
       } else {
         return betterDoctor.searchBy(name)
-          .then(function (body) {
-            cache.store(name, body);
-            return body;
+          .then(function (response) {
+            if (response.statusCode == 200) {
+              cache.store(name, response);
+            }
+            return response;
           });
       }
     });

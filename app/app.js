@@ -7,9 +7,10 @@ app.get('/api/v1/doctors/search', function (req, res, next) {
   var name = req.query.name || '';
 
   searchDoctorByName.execute(name)
-  .then(function (body) {
-    res.set('Content-Type', 'application/json');
-    res.send(body);
+  .then(function (response) {
+    res.set(response.headers);
+    res.status(response.statusCode);
+    res.send(response.body);
   })
   .catch(next);
 });

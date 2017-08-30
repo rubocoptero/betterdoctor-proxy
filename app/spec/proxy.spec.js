@@ -19,12 +19,30 @@ describe('BetterDoctor API proxy spec', function () {
     elasticHelper.flush().then(done);
   });
 
-  it('proxies BetterDoctor API response', function (done) {
+  it('proxies the API response', function (done) {
     var name = 'Ruben';
     mockApiSearchFor(name);
 
     request.get(searchUriFor(name), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorResponse));
+      done();
+    });
+  });
+
+  it('returns errors from the API', function (done) {
+    var name = 'Jack';
+    var returnedStatus = 400;
+    var betterDoctorError = { response: 'ERROR' };
+
+    var userKey = process.env.BETTER_DOCTOR_USER_KEY;
+    nock('https://api.betterdoctor.com')
+      .get('/2016-03-01/doctors')
+      .query({ name: name, user_key: userKey })
+      .reply(returnedStatus, betterDoctorError);
+
+    request.get(searchUriFor(name), function (error, response, body) {
+      expect(body).toEqual(JSON.stringify(betterDoctorError));
+      expect(response.statusCode).toEqual(returnedStatus);
       done();
     });
   });
