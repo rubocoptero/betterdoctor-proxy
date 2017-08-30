@@ -1,8 +1,15 @@
-web:
-  build: .
-  volumes:
-    - "./app:/src/app"
-  ports:
-    - "3030:3000"
-  env_file:
-    - .env
+version: '2'
+services:
+  web:
+    build: .
+    volumes:
+      - "./app:/src/app"
+    ports:
+      - "3030:3000"
+    env_file:
+      - .env
+    depends_on:
+      - elastic
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
