@@ -18,4 +18,6 @@ var createCache = function () {
   return self;
 };
 
-exports.create = createCache;
+var cache = createCache();
+
+module.exports = cache;
