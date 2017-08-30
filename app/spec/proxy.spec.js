@@ -21,7 +21,7 @@ describe('BetterDoctor API proxy spec', function () {
 
   it('proxies the API response', function (done) {
     var name = 'Ruben';
-    mockApiSearchFor(name);
+    mockApiSearchFor(name).reply(200, betterDoctorResponse);
 
     request.get(searchUriFor(name), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorResponse));
@@ -34,11 +34,7 @@ describe('BetterDoctor API proxy spec', function () {
     var returnedStatus = 400;
     var betterDoctorError = { response: 'ERROR' };
 
-    var userKey = process.env.BETTER_DOCTOR_USER_KEY;
-    nock('https://api.betterdoctor.com')
-      .get('/2016-03-01/doctors')
-      .query({ name: name, user_key: userKey })
-      .reply(returnedStatus, betterDoctorError);
+    mockApiSearchFor(name).reply(returnedStatus, betterDoctorError);
 
     request.get(searchUriFor(name), function (error, response, body) {
       expect(body).toEqual(JSON.stringify(betterDoctorError));
@@ -50,7 +46,7 @@ describe('BetterDoctor API proxy spec', function () {
   describe('when requesting the same for second time', function () {
     it('returns a cached response', function (done) {
       var name = 'Tom';
-      mockApiSearchFor(name);
+      mockApiSearchFor(name).reply(200, betterDoctorResponse);
 
       request.get(searchUriFor(name), function (error, response, body) {
         request.get(searchUriFor(name), function (error, response, body) {
@@ -70,7 +66,6 @@ describe('BetterDoctor API proxy spec', function () {
 
     return nock('https://api.betterdoctor.com')
       .get('/2016-03-01/doctors')
-      .query({ name: name, user_key: userKey })
-      .reply(200, betterDoctorResponse);
+      .query({ name: name, user_key: userKey });
   }
 });
