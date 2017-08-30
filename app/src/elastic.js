@@ -4,14 +4,14 @@ var client = new elasticsearch.Client({
   log: 'info'
 });
 
-var indexName = 'search_responses';
-var typeName = 'responses';
+var INDEX_NAME = 'search_responses';
+var TYPE_NAME = 'responses';
 
 var initializeIndex = function () {
-  client.indices.exists({ index: indexName })
+  client.indices.exists({ index: INDEX_NAME })
   .then(function (exists) {
     if (!exists) {
-      return client.indices.create({ index: indexName });
+      return client.indices.create({ index: INDEX_NAME });
     }
   })
   .catch(logError);
@@ -19,8 +19,8 @@ var initializeIndex = function () {
 
 var store = function (key, value) {
   return client.index({  
-    index: indexName,
-    type: typeName,
+    index: INDEX_NAME,
+    type: TYPE_NAME,
     id: key,
     body: value
   })
@@ -29,8 +29,8 @@ var store = function (key, value) {
 
 var retrieve = function (key) {
   return client.get({
-    index: indexName,
-    type: typeName,
+    index: INDEX_NAME,
+    type: TYPE_NAME,
     id: key
   })
   .then(function extractBody(response) {
@@ -41,8 +41,8 @@ var retrieve = function (key) {
 
 var exists = function (key) {
   return client.exists({
-    index: indexName,
-    type: typeName,
+    index: INDEX_NAME,
+    type: TYPE_NAME,
     id: key
   })
   .catch(logError);
@@ -50,7 +50,7 @@ var exists = function (key) {
 
 var flush = function () {
   return client.deleteByQuery({
-    index: indexName,
+    index: INDEX_NAME,
     q: '*',
     conflicts: 'proceed',
     refresh: true
