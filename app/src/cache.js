@@ -1,18 +1,18 @@
+var elastic = require('./elastic.js');
+
 var createCache = function () {
   var self = {};
 
-  var store = {};
-
   self.store = function (key, value) {
-    store[key] = value;
+    return elastic.store(key, value);
   };
 
   self.retrieve = function (key) {
-    return store[key];
+    return elastic.retrieve(key);
   };
 
   self.contains = function (key) {
-    return !!store[key];
+    return elastic.exists(key);
   };
 
   return self;

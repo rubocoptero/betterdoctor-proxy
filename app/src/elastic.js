@@ -8,7 +8,7 @@ var indexName = 'search_responses';
 var typeName = 'responses';
 
 var initializeIndex = function () {
-  client.indices.exists({ index: indexName})
+  client.indices.exists({ index: indexName })
   .then(function (exists) {
     if (!exists) {
       return client.indices.create({ index: indexName });
@@ -46,17 +46,25 @@ var exists = function (key) {
     id: key
   })
   .catch(logError);
-}
+};
 
+var flush = function () {
+  return client.deleteByQuery({
+    index: indexName,
+    q: '*',
+    conflicts: 'proceed',
+    refresh: true
+  })
+  .catch(logError);
+};
 
 function logError(error) {
   console.error('ERROR:', error);
 }
 
-initializeIndex();
-
 module.exports = {
   store: store,
   retrieve: retrieve,
-  exists: exists
+  exists: exists,
+  flush: flush
 };

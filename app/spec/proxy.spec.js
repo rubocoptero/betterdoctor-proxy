@@ -3,16 +3,22 @@ process.env.NODE_ENV = 'test'
 var request = require('request');
 var nock = require('nock');
 var app = require('../server.js');
+var elastic = require('../src/elastic.js');
 
 describe('Proxy spec', function () {
   var betterDoctorResponse = { response: 'WHATEVER' };
 
-  beforeAll(function () {
+  beforeAll(function (done) {
     app.listen(3001);
+    elastic.flush().then(done);
   });
 
   afterAll(function () {
     app.stop();
+  });
+
+  afterEach(function (done) {
+    elastic.flush().then(done);
   });
 
   it('proxies BetterDoctor API response', function (done) {
