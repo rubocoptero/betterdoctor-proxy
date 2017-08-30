@@ -8,6 +8,7 @@ app.get('/api/v1/doctors/search', function (req, res, next) {
 
   searchDoctorByName.execute(name)
   .then(function (body) {
+    res.set('Content-Type', 'application/json');
     res.send(body);
   })
   .catch(next);
