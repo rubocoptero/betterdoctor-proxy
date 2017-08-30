@@ -3,7 +3,7 @@ services:
   web:
     build: .
     volumes:
-      - "./app:/src/app"
+      - "./app:/app"
     ports:
       - "3030:3000"
     env_file:

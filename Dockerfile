@@ -1,10 +1,10 @@
 FROM node:8.4.0
-RUN mkdir /src
+RUN mkdir /app
 
 RUN npm install nodemon -g
 
-WORKDIR /src
-ADD app/package.json /src/package.json
+WORKDIR /app
+ADD app/package.json /app/package.json
 RUN npm install
 
 EXPOSE 3000
