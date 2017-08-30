@@ -1,13 +1,13 @@
 var cache = require('../../src/services/cache');
-var elastic = require('../../src/infrastructure/elastic');
+var elasticHelper = require('../support/elastic-helper');
 
 describe('Cache', function () {
   beforeAll(function (done) {
-    elastic.flush().then(done);
+    elasticHelper.flush().then(done);
   });
 
   afterEach(function (done) {
-    elastic.flush().then(done);
+    elasticHelper.flush().then(done);
   });
 
   it('is case insensitive', function (done) {

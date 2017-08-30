@@ -1,14 +1,14 @@
 var request = require('request');
 var nock = require('nock');
 var app = require('../app');
-var elastic = require('../src/infrastructure/elastic');
+var elasticHelper = require('./support/elastic-helper');
 
 describe('BetterDoctor API proxy spec', function () {
   var betterDoctorResponse = { response: 'WHATEVER' };
 
   beforeAll(function (done) {
     app.listen(3001);
-    elastic.flush().then(done);
+    elasticHelper.flush().then(done);
   });
 
   afterAll(function () {
@@ -16,7 +16,7 @@ describe('BetterDoctor API proxy spec', function () {
   });
 
   afterEach(function (done) {
-    elastic.flush().then(done);
+    elasticHelper.flush().then(done);
   });
 
   it('proxies BetterDoctor API response', function (done) {

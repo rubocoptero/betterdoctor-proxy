@@ -48,16 +48,6 @@ var exists = function (key) {
   .catch(logError);
 };
 
-var flush = function () {
-  return client.deleteByQuery({
-    index: INDEX_NAME,
-    q: '*',
-    conflicts: 'proceed',
-    refresh: true
-  })
-  .catch(logError);
-};
-
 function logError(error) {
   console.error('ERROR:', error);
 }
@@ -65,6 +55,5 @@ function logError(error) {
 module.exports = {
   store: store,
   retrieve: retrieve,
-  exists: exists,
-  flush: flush
+  exists: exists
 };
