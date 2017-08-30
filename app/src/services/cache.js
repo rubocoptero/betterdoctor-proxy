@@ -8,14 +8,20 @@ var createCache = function () {
   };
 
   self.store = function (key, value) {
+    if (!key) { return Promise.resolve(false); }
+
     return elastic.store(normalize(key), value);
   };
 
   self.retrieve = function (key) {
+    if (!key) { return Promise.resolve(undefined); }
+
     return elastic.retrieve(normalize(key));
   };
 
   self.contains = function (key) {
+    if (!key) { return Promise.resolve(false); }
+
     return elastic.exists(normalize(key));
   };
 

@@ -19,4 +19,33 @@ describe('Cache', function () {
       });
     });
   });
+
+  describe('when key is empty', function () {
+    describe('store', function () {
+      it('returns false', function (done) {
+        cache.store('', { content: 'value' }).then(function (response) {
+          expect(response).toEqual(false);
+          done();
+        });
+      });
+    });
+
+    describe('retrieve', function () {
+      it('returns undefined', function (done) {
+        cache.retrieve('').then(function (value) {
+          expect(value).toEqual(undefined);
+          done();
+        });
+      });
+    });
+
+    describe('contains', function () {
+      it('returns false', function (done) {
+        cache.contains('').then(function (response) {
+          expect(response).toEqual(false);
+          done();
+        });
+      });
+    });
+  });
 });
