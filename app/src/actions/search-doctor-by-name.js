@@ -1,4 +1,4 @@
-var request = require('request-promise');
+var betterDoctor = require('../services/better-doctor.js');
 var cache = require('../cache.js');
 
 var responseCache = cache.create();
@@ -9,10 +9,7 @@ var execute = function (name) {
       if (contains) {
         return responseCache.retrieve(name);
       } else {
-        var userKey = process.env.BETTER_DOCTOR_USER_KEY;
-        endpoint = 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name + '&user_key=' + userKey;
-
-        return request.get(endpoint)
+        return betterDoctor.searchBy(name)
           .then(function (body) {
             responseCache.store(name, body);
             return body;
