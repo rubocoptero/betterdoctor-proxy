@@ -1,6 +1,6 @@
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
-  host: 'http://elastic:changeme@172.18.0.2:9200',
+  host: process.env.ELASTIC_SEARCH_HOST,
   log: 'info'
 });
 
