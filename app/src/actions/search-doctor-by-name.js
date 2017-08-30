@@ -1,5 +1,5 @@
 var betterDoctor = require('../services/better-doctor');
-var cache = require('../cache');
+var cache = require('../services/cache');
 
 var execute = function (name) {
   return cache.contains(name)
